@@ -1,0 +1,74 @@
+git clone https://bitbucket.org/luca_de_alfaro/cordovastarterapp.git
+
+cd into the directoryof where you cloned the folder
+
+git fetch && git checkout tictactoe 
+
+grab shobhits's a.js from
+	here https://raw.githubusercontent.com/ShobhitMaheshwari/battlefield/master/a.js
+
+add it to the index.js inside the 'www' folder.
+	careful for brackets!
+
+edit html to change it from ...[0,1,2]; this is the resulted change.
+	<tr v-for="i in [0, 1, 2, 3, 4, 5, 6, 7]">
+   	<td v-on:click="play(i,j)" v-for="j in [0, 1, 2, 3, 4, 5, 6, 7]">\
+  	${board[i * 8 + j]} //was i*3+j but changed to 8.
+	
+	make 2 of those in html so you have: and add a break <br>
+
+	<div class="board container">
+                <table>
+                    <tr v-for="i in [0, 1, 2, 3, 4, 5, 6, 7]">
+                        <td v-on:click="play(i,j)" v-for="j in [0, 1, 2, 3, 4, 5, 6, 7]">
+                            ${board[i * 8 + j]}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            </br>
+            <div class="board container">
+                <table>
+                    <tr v-for="i in [0, 1, 2, 3, 4, 5, 6, 7]">
+                        <td v-on:click="play(i,j)" v-for="j in [0, 1, 2, 3, 4, 5, 6, 7]">
+                            ${board[i * 8 + j]}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+change the CSS to match up with the squares  to fit:
+	.app .board td {
+	 	width: 30px; 
+	 	height: 30px;
+	  	border: solid 2px black;
+	}
+
+rundown of game:
+the App is loaded.
+All cells are empty.
+O is the first player.
+The player can place an O in any of the cells.
+The player-turn is changed X.
+Each time a player places a mark, the turn is handed to the non-active player.
+After each strike, we need to check if the game meets any winning condition.
+We also need to check if the game is a draw.
+After or anytime in between a game, a button called Restart can be clicked to restart the game.
+The status of the game that is if the game is in progress or won or is a draw.
+In terms of progress, the status displays the turn of the respective player.
+The game also displays the number of matches and the number of wins for each player.
+
+computed
+
+initialize is the thing that starts up. we need to set up the vue.
+
+
+weatches alow us to animate changes of any numberical poroperty into another property
+
+
+
+
+
+
+
+

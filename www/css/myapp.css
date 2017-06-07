@@ -1,0 +1,36 @@
+/* line 1, ../sass/_main.scss */
+.colorful {
+  color: #bb8833;
+}
+
+/* line 4, ../sass/_main.scss */
+.app {
+  	margin: 10px;
+}
+/* line 10, ../sass/_main.scss */
+.app .board {
+  	width: 100%;
+}
+/* line 12, ../sass/_main.scss */
+.app .board table {
+	position: relative;
+	text-align: center;
+	margin: 0 auto;
+	background-color: white;
+}
+/* line 15, ../sass/_main.scss */
+.app .board td {
+ 	width: 30px; 
+ 	height: 30px;
+  	border: solid 2px black;
+}
+#backgroundIMG{
+    z-index: -1;
+  	position: absolute;
+  	margin: 0 auto;
+  	left:0px;
+}
+.colortext{
+	color: white;
+	padding:5px;
+}
