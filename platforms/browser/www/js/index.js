@@ -51,7 +51,6 @@ var app = function() {
 
     // This is the main control loop.
     function call_server() {
-        console.log("Yo server what's good? | call_server()");
         if (self.vue.chosen_magic_word === null) { 
             console.log("No Magic Word");
             setTimeout(call_server, call_interval);
@@ -152,7 +151,7 @@ var app = function() {
                         self.player_1 = answer.player_1;
                         self.player_2 = answer.player_2;
 
-                        if (self.board_is_won(self.own_board())) {
+                        if (self.board_is_won(self.my_board())) {
                             self.vue.win_line = "You lost at the Brain Ship :(";
                         }
 
@@ -244,24 +243,24 @@ var app = function() {
 
     //play function with multiple edits from OG due to different game logic.
     self.play = function (i, j) {
-        var opponent_board = self.opponent_board(); //set opponent board
-        if (self.vue.is_my_turn && opponent_board[8*i+j] !== 'h' && opponent_board[8*i+j] !== 'w') {
-            if (typeof(opponent_board[8*i+j]) === "number") { //IT'S A HITT!!!!!!?(fire emoji)
-                var shipid = opponent_board[8*i+j];
+        var rival_board = self.rival_board(); //set rival board
+        if (self.vue.is_my_turn && rival_board[8*i+j] !== 'h' && rival_board[8*i+j] !== 'w') {
+            if (typeof(rival_board[8*i+j]) === "number") { //IT'S A HITT!!!!!!?(fire emoji)
+                var shipid = rival_board[8*i+j];
                 var shipcount = 0;
-                for (var index = 0; index < opponent_board.length; index++) {
-                    if (opponent_board[index] === shipid) { shipcount++; }
+                for (var index = 0; index < rival_board.length; index++) {
+                    if (rival_board[index] === shipid) { shipcount++; }
                 }
-                opponent_board[8*i+j] = 'h'; //set their board at that i,j position to 'h'
-                if (shipcount <= 1) {   self.reveal_water(opponent_board, i, j);  } //?final hit of ship: reveal
+                rival_board[8*i+j] = 'h'; //set their board at that i,j position to 'h'
+                if (shipcount <= 1) {   self.reveal_water(rival_board, i, j);  } //?final hit of ship: reveal
             }
             //YOU MISSED..(sad tears emoji)
-            else if (opponent_board[8*i+j] === '') { opponent_board[8*i+j] = 'w';}  //set their baord at i,j position to 'w'
+            else if (rival_board[8*i+j] === '') { rival_board[8*i+j] = 'w';}  //set their baord at i,j position to 'w'
             self.vue.is_my_turn = false; //switch turns
             self.vue.turn_count++; //add turn count
 
             // Check for win
-            if (self.board_is_won(opponent_board)) { self.vue.win_line = "You won!"; }
+            if (self.board_is_won(rival_board)) { self.vue.win_line = "You won!"; }
             self.send_state();
         }
     };
@@ -279,45 +278,40 @@ var app = function() {
         //direction not adjacent? (small ships)
         if (dir === undefined) {
             for (var j = 0; j < dirs.length; j++) { //check all direction ranges
-                var offset = self.vadd(x, y, dirs[j].x, dirs[j].y);
-                if (board[self.vflat(offset)] === '') {
+                var offset = self.adjRange(x, y, dirs[j].x, dirs[j].y);
+                if (board[self.objRange(offset)] === '') {
                     self.set_in_board(board, offset.x, offset.y, 'w'); 
                 }
             }
             return;
         }
         //checking for hit in range of "positive" direction 
-        for (var i = 0; self.vflat(self.vadd(x, y, i*dir.x, i*dir.y)) >= 0 
-            && self.vflat(self.vadd(x, y, i*dir.x, i*dir.y)) < 64; i++) {
-                var center = self.vadd(x, y, i*dir.x, i*dir.y);
-                if (board[self.vflat(center)] !== 'h') { break; }
+        for (var i = 0; self.objRange(self.adjRange(x, y, i*dir.x, i*dir.y)) >= 0 
+            && self.objRange(self.adjRange(x, y, i*dir.x, i*dir.y)) < 64; i++) {
+                var center = self.adjRange(x, y, i*dir.x, i*dir.y);
+                if (board[self.objRange(center)] !== 'h') { break; }
                 for (var j = 0; j < dirs.length; j++) {
-                    var offset = self.vadd(center.x, center.y, dirs[j].x, dirs[j].y);
-                    if (board[self.vflat(offset)] === '') {
+                    var offset = self.adjRange(center.x, center.y, dirs[j].x, dirs[j].y);
+                    if (board[self.objRange(offset)] === '') {
                      self.set_in_board(board, offset.x, offset.y, 'w');
                     }
                 }
         }
          //checking for hit in range of range in "negative" direction 
-        for (var i = 0; self.vflat(self.vadd(x, y, -1*i*dir.x, -1*i*dir.y)) >= 0 
-            && self.vflat(self.vadd(x, y, -1*i*dir.x, -1*i*dir.y)) < 64; i++) {
-                var center = self.vadd(x, y, -1*i*dir.x, -1*i*dir.y);
-                if (board[self.vflat(center)] !== 'h') {
+        for (var i = 0; self.objRange(self.adjRange(x, y, -1*i*dir.x, -1*i*dir.y)) >= 0 
+            && self.objRange(self.adjRange(x, y, -1*i*dir.x, -1*i*dir.y)) < 64; i++) {
+                var center = self.adjRange(x, y, -1*i*dir.x, -1*i*dir.y);
+                if (board[self.objRange(center)] !== 'h') {
                     break;
                 }
                 for (var j = 0; j < dirs.length; j++) {
-                    var offset = self.vadd(center.x, center.y, dirs[j].x, dirs[j].y);
-                    if (board[self.vflat(offset)] === '') {
+                    var offset = self.adjRange(center.x, center.y, dirs[j].x, dirs[j].y);
+                    if (board[self.objRange(offset)] === '') {
                         self.set_in_board(board, offset.x, offset.y, 'w');
                     }
                 }
         }
     };
-
-
-
-
-
 
     //fn to set the board &fn&
     self.set_in_board = function(board, x, y, val) {
@@ -326,21 +320,21 @@ var app = function() {
         }
     };
     //fn helper methods for calculating reveal_water fn &fn&
-    self.vadd = function(x1, y1, x2, y2) { return {x: (x1+x2), y: (y1+y2)}; } //adjacent 
-    self.vflat = function(x1, y1) { //no adjacency
+    self.adjRange = function(x1, y1, x2, y2) { return {x: (x1+x2), y: (y1+y2)}; } //adjacent 
+    self.objRange = function(x1, y1) { //no adjacency
         if (typeof(x1) === "object") { return 8*x1.x+x1.y;}
         return 8*x1+y1;
     }
 
     //fn determines the your board based on the identity returned. &fn&
-    self.own_board = function() {
+    self.my_board = function() {
         if (self.vue === undefined) { return []; }
         if (self.player_1 === self.my_identity) { return self.vue.board_1; }
         else { return self.vue.board_2; }
     };
 
     //fn determines the opponenent board based on the identity returned. &fn&
-    self.opponent_board = function() {
+    self.rival_board = function() {
         if (self.vue === undefined) { return []; }
         if (self.player_1 === self.my_identity) { return self.vue.board_2; }
         else { return self.vue.board_1; }
@@ -391,7 +385,7 @@ var app = function() {
             board_2: self.null_board(), // board_1 "ref" &edit&
             is_other_present: false,
             is_my_turn: false,          
-            status_line: "No players here",
+            status_line: "Enter a magic word and start it up!",
             win_line: "",
             turn_count: 0,
             game_count: 0
@@ -400,8 +394,8 @@ var app = function() {
             set_magic_word: self.set_magic_word,
             play: self.play,
             new_game: self.new_game,
-            own_board: self.own_board,
-            opponent_board: self.opponent_board
+            my_board: self.my_board,
+            rival_board: self.rival_board
         }
     });
 

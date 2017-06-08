@@ -16,47 +16,52 @@
         <script type="text/javascript" src="js/logic.js"></script>
 
     </head>
-    <body>
+    <body class = "centered">
          <img id ="backgroundIMG" src ="sloth.jpg">
         <h4 class="colortext">BRAIN SHIP | BattleShip: Vue.js & Cordova </h4>
         <div id="vue-div" class="app" style="display:none">
             <div class="colortext top_input centered">
-                <b class="colortext">FOR MAGIC WORD: type BRAINBLAST first then add something after.</b>
-                </br>
+                <p>For magic word,: </p>
+                <b id = "info" class="colortext"> Type BRAINBLAST, then add something after</b>
+                </br></br>
                 <i class="colortext">EX: BRAINBLAST69420</i>
-                <input v-model="magic_word" placeholder="shared magic word" />
-                <button v-on:click="set_magic_word">Play</button>
-                <button v-on:click="new_game">New Game</button>
+                <input id = "magic_input" v-model="magic_word" placeholder="shared magic word" />
+
+                <button class ="rounded" v-on:click="set_magic_word">1. Set Magic Word</button>
+                <button class ="rounded" v-on:click="new_game">2. Start New Game</button>
                 <i v-if="need_new_magic_word" class="fa fa-warning"></i>
             </div>
             <div class="colortext centered">
-                <div class="status_line">
-                    <b>${win_line}</b> ${status_line}
-                </div>
-                <div class="colortext centered">
-                    <b v-if="!is_my_turn">not</b> your turn.
+                <div class="status_line"> <b>${win_line}</b> ${status_line} </div>
+                <div class="colortext centered"> 
+                    <b v-if="!is_other_present && !is_my_turn"></b>
+                    <b v-if="is_my_turn">MAKE A MOVE! Click on a square from the top box</b>
+                    <b v-if="!is_my_turn && is_other_present">NOT YOUR TURN, please wait...</b>
                 </div>
             </div>
-            <div class="board container centered">
+
+            <div id ="rivalBoard" class="board container centered">
+                <p>RIVAL BOARD</p>
                 <table>
                     <tr v-for="i in [0, 1, 2, 3, 4, 5, 6, 7]">
                         <td v-on:click="play(i,j)" 
                             v-for="j in [0, 1, 2, 3, 4, 5, 6, 7]"
-                            v-bind:class="{ red: opponent_board()[i*8+j] === 'h' }">
-                            <template v-if="opponent_board()[i*8+j] === 'w'">
+                            v-bind:class="{ red: rival_board()[i*8+j] === 'h' }">
+                            <template v-if="rival_board()[i*8+j] === 'w'">
                                 <i class="fa fa-circle" style="color:blue"></i>
                             </template>
                         </td>
                     </tr>
                 </table>
             </div>
-            <div class="board container centered">
+            <div id ="myBoard" class="board container centered">
+                <p>MY BOARD</p>
                 <table>
                     <tr v-for="i in [0, 1, 2, 3, 4, 5, 6, 7]">
                         <td v-for="j in [0, 1, 2, 3, 4, 5, 6, 7]"
-                            v-bind:class="{ red: own_board()[8*i+j] === 'h',
-                                green: typeof(own_board()[8*i+j]) === 'number', 
-                                blue: own_board()[8*i+j] === 'w'}">
+                            v-bind:class="{ red: my_board()[8*i+j] === 'h',
+                                blue: my_board()[8*i+j] === 'w',
+                                green: typeof(my_board()[8*i+j]) === 'number'}">
                         </td>
                     </tr>
                 </table>

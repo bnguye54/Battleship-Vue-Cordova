@@ -6,23 +6,28 @@
 /* line 4, ../sass/_main.scss */
 .app {
   	margin: 10px;
+    width:90%;
+    text-align: center;
 }
 /* line 10, ../sass/_main.scss */
 .app .board {
+    display: inline-block;
   	width: 100%;
+    margin-top: 10px;
 }
 /* line 12, ../sass/_main.scss */
 .app .board table {
 	position: relative;
 	text-align: center;
 	margin: 0 auto;
-	background-color: white;
+	
 }
 /* line 15, ../sass/_main.scss */
 .app .board td {
  	width: 30px; 
  	height: 30px;
-  	border: solid 2px black;
+  border: solid 2px white;
+
 }
 #backgroundIMG{
     z-index: -1;
@@ -32,5 +37,21 @@
 }
 .colortext{
 	color: white;
-	padding:5px;
+	margin:5px;
+  text-align: center;
+}
+#magic_input{
+  margin-bottom:15px;
+}
+
+#rivalBoard p{
+ color: red; 
+ text-align: center;
+}
+#info{
+  color: blue;
+}
+#myBoard p{
+  color: blue;
+  text-align: center;
 }
